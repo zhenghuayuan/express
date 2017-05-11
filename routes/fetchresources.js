@@ -27,33 +27,37 @@ function start(cb) {
 	http.get(url, function(sres) {
 		console.log("开始")
 		var chunks = [];
-		var size = 0;
 		sres.on('data', function(chunk) {
 			chunks.push(chunk);
 		});
-		// chunks里面存储着网页的 html 内容，将它zhuan ma传给 cheerio.load 之后
-		// 就可以得到一个实现了 jQuery 接口的变量，将它命名为 `$`
-		// 剩下就都是 jQuery 的内容了
 		sres.on('end', function() {
-			// var buff = Buffer.concat(chunks);  
-			// var result = iconv.decode(buff, "utf8");//转码//var result = buff.toString();//不需要转编码,直接tostring  
-			console.log("结束")
-			// var html = iconv.decode(Buffer.concat(chunks), 'uft8');
-			cb(chunks.toString().replace(/^\s+|\s+$/g, ""));
+			// 看meta是否uft-8，不是的话得转码
+			// var result = iconv.decode(buff, "utf8");
+			//不需要转编码,直接tostring 
+			var result = chunks.toString().replace(/(^\s*)|(\s*$)/g, "");
+			var arr = [];
 			// var titles = [];
-			// 由于咱们发现此网页的编码格式为gb2312，所以需要对其进行转码，否则乱码
-			// 依据：“<meta http-equiv="Content-Type" content="text/html; charset=gb2312">”
-			// var $ = cheerio.load(html, {
-			// 	decodeEntities: false
-			// });
-			// $('.co_content8 .ulink').each(function(idx, element) {
-			// 	var $element = $(element);
-			// 	titles.push({
-			// 		title: $element.text()
-			// 	})
-			// })
-			// console.log(titles);
-
+			var $ = cheerio.load(result);
+			$(".post_list li").each(function(index, item){
+				var jqItem = $(item)
+				var userpic = jqItem.find(".post_listIcon img").attr("src");
+				var username = jqItem.find(".post_blog_nickname").text();
+				var age = jqItem.find(".post_blog_info").find("i").text();
+				var sex = jqItem.find(".post_blog_info").find("i").hasClass("user_info_gender1")?1:2;
+				var contentText = jqItem.find(".post_list_content").text();
+				var contentImg = jqItem.find(".post_list_picImg img").attr("src");
+				arr.push({
+					index: index,
+					userpic: userpic,
+					username: username,
+					age: age,
+					sex: sex,
+					contentText: contentText,
+					contentImg: contentImg,	
+				})
+			})
+			cb(arr);
+			console.log("结束")
 		});
 	});
 }
