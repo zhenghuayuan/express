@@ -1,5 +1,9 @@
-extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
+html
+	head
+		title= title
+		meta(name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0")
+		style.
+			.nickname {color: red;}
+			.headimgurl {display: block; width: 50%;}
+	body
+		div= "hellow word"
