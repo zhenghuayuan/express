@@ -10,8 +10,6 @@ var users = require('./routes/users');
 var fetchresources = require('./routes/fetchresources');
 var fetchbaidu = require('./routes/fetchbaidu');
 
-
-
 var app = express();
 
 // view engine setup
@@ -26,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', users);
+app.use('/', index);
 app.use('/users', users);
 app.use('/fetchresources', fetchresources);
 app.use('/fetchbaidu', fetchbaidu);

@@ -23,13 +23,19 @@
 			el: "#wrap",
 			data: {
 				content: "",
+				sex: 1,
+				age: 18,
 			},
 			methods: {
 				fetchStart: function(){
 					$.ajax({
 						url: "http://localhost:3000/fetchbaidu",
-						data: "",
-						type: "get",
+						data: {
+							content: "马水电费",
+							sex: 1,
+							age: 18,
+						},
+						type: "post",
 						dataType: "json",
 						success: function(res){
 							vm.content = JSON.stringify(res);
