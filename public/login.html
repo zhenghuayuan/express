@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="http://pub.froup.net/hoomic/publicJs/reset.css">
+	<title>登录</title>
+	<style type="text/css">
+	
+	</style>
+</head>
+<body>
+	<div class="wrap" id="wrap">
+		<div>
+			<label for="">账号：</label>
+			<input type="text" v-model="username" :value="username">
+		</div>
+		<div>
+			<label for="">密码：</label>
+			<input type="text" v-model="password" :value="password">
+		</div>
+		<div>
+			<input type="submit" value="登录" @click="login">
+		</div>
+	</div>
+	<script src="http://pub.froup.net/hoomic/publicJs/vue.min.js" type="text/javascript"></script>
+	<script src="http://pub.froup.net/hoomic/publicJs/zepto.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var vm = new Vue({
+			el: "#wrap",
+			data: {
+				username: "zheng",
+				password: "0000",
+			},
+			methods: {
+				login(){
+					var _this = this; 
+					$.ajax({
+						url: "http://localhost:3000/login",
+						data: {
+							username: _this.username,
+							password: _this.password,
+						},
+						type: "post",
+						dataType: "json",
+						success: function(res){
+							console.log(res)
+						},
+						error: function(){
+							console.log("ajax-error")
+						}
+					})
+				}
+			}
+		})
+	</script>
+</body>
+</html>

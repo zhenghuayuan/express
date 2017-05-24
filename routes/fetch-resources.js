@@ -1,28 +1,9 @@
-var express = require('express');
-var router = express.Router();
 var cheerio = require('cheerio');
 var http = require('http');
 var https = require('https');
-
 var iconv = require('iconv-lite');
-// var url = 'https://ee331.com/';
+var pool = require("../db/index");
 var url = 'http://www.hoomic.com/';
-
-
-router.get('/', function(req, res, next) {
-
-	start(function(data) {
-		res.json({
-			code: 0,
-			body: {
-				message: data
-			},
-			msg: "",
-		});
-	})
-});
-
-
 function start(cb) {
 	http.get(url, function(sres) {
 		console.log("开始")
@@ -47,7 +28,6 @@ function start(cb) {
 				var contentText = jqItem.find(".post_list_content").text();
 				var contentImg = jqItem.find(".post_list_picImg img").attr("src");
 				arr.push({
-					index: index,
 					userpic: userpic,
 					username: username,
 					age: age,
@@ -56,11 +36,49 @@ function start(cb) {
 					contentImg: contentImg,	
 				})
 			})
+			insertUserInfo(arr);
 			cb(arr);
 			console.log("结束")
 		});
 	});
 }
+var insertUserInfo = function(arr){
+	pool.getConnection(function(err, connection){
+		if(err){
+			console.log(err);
+			return;
+		};
+		var sqlKeys = "(" +Object.keys(arr[0]).join(",") +")";
+		var sqlValues = "";
+		arr.forEach(function(item, index){
+			var values = [];
+			for(var i in item){
+				values.push(item[i]?'\''+item[i]+'\'':"null");
+			}
+			console.log(values.length)
+			sqlValues += "("+values.join(",")+"),";
+		});
+		sqlValues = sqlValues.slice(0, sqlValues.length-1);
+		connection.query("INSERT INTO hoomic(userpic,username,age,sex,contentText,contentImg) VALUES"+sqlValues, function(err, fields){
+			connection.release();
+			if (err){
+				console.log(`error:${err}`);
+				return;
+			};
+			console.log("插入多条数据成功");
+		});
 
+	}) 
+}
 
-module.exports = router;
+module.exports = function(req, res, next) {
+	start(function(data) {
+		res.json({
+			code: 0,
+			body: {
+				message: data
+			},
+			msg: "",
+		});
+	})
+};

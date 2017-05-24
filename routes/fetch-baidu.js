@@ -1,5 +1,3 @@
-var express = require('express');
-var router = express.Router();
 var request = require('request');
 var querystring = require('querystring');
 var axios = require('axios');
@@ -32,7 +30,8 @@ var options = {
 		'X-Requested-With':'XMLHttpRequest',
     }
 };
-router.post('/', function(req, res, next) {
+
+module.exports = function(req, res, next) {
 	var REQ = http.request(options, function(RES){
 		var arr = [];
 		RES.on("data", function(chunk){
@@ -51,9 +50,7 @@ router.post('/', function(req, res, next) {
 	})
 	REQ.write(postData); 
 	REQ.end();
-});
-
-module.exports = router;
+};
 
 // router.post('/', function(req, res, next) {
 	//post req.body
