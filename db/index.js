@@ -8,7 +8,24 @@ var pool= mysql.createPool({
 	// 最大连接数，默认为10
 	connectionLimit: 10,
 });
-module.exports = pool;
+module.exports = function(sql, values){
+	return new Promise(function(resolve, rejcet){
+		pool.getConnection(function(err, connection){
+			if(err){
+				rejcet(err);
+				return;
+			}
+			connection.query(sql, values, function(err, result){
+				connection.release();
+				if(err){
+					rejcet(err);
+					return;
+				};
+				resolve(result);
+			})
+		});
+	})
+};
 
 // 连接池使用
 // pool.getConnection(function(err, connection){
