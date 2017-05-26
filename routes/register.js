@@ -9,7 +9,8 @@ module.exports = function(res, req, next){
 				code: 100,
 				body: "",
 				msg: "注册失败，用户名冲突",
-			})
+			});
+			throw new Error("注册失败，用户名冲突");
 		}else{
 			return data;
 		}

@@ -20,6 +20,7 @@
     "iconv-lite": "^0.4.17",
     "jsonwebtoken": "^7.4.1",
     "mysql": "^2.13.0",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "ws": "^3.0.0"
   }
 }

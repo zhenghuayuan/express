@@ -4,6 +4,7 @@ module.exports = function(res, req, next){
 	console.log(path.indexOf("/login"))
 	if (path.indexOf("/login") != -1 ||
 		path.indexOf("/register") != -1 ||
+		path.indexOf("/ws") != -1 ||
 		path.indexOf("/fetch-resources") != -1) {
 		return next();
 	}
