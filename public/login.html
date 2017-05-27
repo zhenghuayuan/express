@@ -114,6 +114,10 @@
 </html>
 
 <!-- 	
+var guessSupperData = {
+	food: ["zj","mf","gz","yrc","ss","lm","kl","xlx","xg","hg","pg","sb","ps","hb","nn","xj"],
+	foodText: ["炸鸡","米饭","果汁","羊肉串","寿司","拉面","可乐","小龙虾","西瓜","火锅","扇贝","披萨","披萨","汉堡","牛奶","香蕉"]
+}
 
 前端页面：
 1.获取最近中奖者
@@ -147,7 +151,7 @@ res: [{
 }]
 
 2.更新基本信息 （奖池，用户觅钻，开奖时间）
-api: /api/newestOpenLotteryTime
+api: /api/guessFoodInfo
 type: get
 data: ""
 res: {
@@ -194,20 +198,41 @@ res: {
 	token: "",
 	username: "",
 	userpic: "",
+}
+
+注册
+api: /api/register
+type: get
+data: {
+	username: ,
+	password: ,
+	email:,
+}
+res: {
+	token: "",
+	username: "",
+	userpic: "",
 
 }
 
 
-
 数据库
+
 用户表：
-userid username password userpic sex age mizu token 创建时间
+userid username password role userpic sex age city email mizu token createTime
+描述：userInfo
 
-所有用户购彩订单信息表：
-orderId userid betOptions bet（投入觅钻） status preiods（期号） 下单时间 
+所有用户购彩订单信息表：lotteryOreder
+userid（关联用户） orderId（MD5订单号）preiods（订单所属期号）  betOptions（压注的选项） betGrounp（组数） betMizu（投入觅钻） status（1：未开奖 2：已开奖） createTime下单时间（） 
+描述： 
 
-历史开奖表：
-preiods（期号） options  
+历史开奖表：historyLottery
+preiods（期号） lotteryOptions（开奖选项） lotteryPool（本期奖池） allBetGrounp（总共组数）
+描述：历史每期开奖信息
+
+中奖用户表：
+preiods（期号） lotteryOptions（开奖选项） userid（关联用户） orderId（关联MD5订单号）
+描述：（考虑到需要个存储中奖者的表）所有的历史中奖者  
 
 
 
@@ -217,4 +242,26 @@ preiods（期号） options
 
 -->
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+问题：
+1.数据库查询里排序，还是取出来后排序？
+2.数据处理，是取出来后处理吗？
+3.
 

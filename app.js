@@ -24,7 +24,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 //     next();
 // });
 // 路由
-app.use('/', index);
+app.use(function(res, req, next){
+	console.log(1)
+	next()
+});
+
+app.use('/api', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

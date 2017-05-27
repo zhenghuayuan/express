@@ -2,6 +2,12 @@ var pool = require("../db/index");
 module.exports = function(res, req, next){
 	var username = res.body.username;
 	var password = res.body.password;
+	var email = res.body.email;
+	console.log(1)
+	req.json({
+		code: 0
+	})
+	return;
 	pool("select * from userInfo where username=?", [username])
 	.then(function(data){
 		if (data.length>0) {

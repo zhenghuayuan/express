@@ -29,13 +29,12 @@
 			methods: {
 				fetchStart: function(){
 					$.ajax({
-						url: "http://localhost:3000/fetchbaidu",
+						url: "http://localhost:3000/api/guessFoodInfo",
 						data: {
 							content: "马水电费",
-							sex: 1,
-							age: 18,
+							cs: "1asdsa"
 						},
-						type: "post",
+						type: "get",
 						dataType: "json",
 						success: function(res){
 							vm.content = JSON.stringify(res);
