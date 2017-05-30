@@ -1,29 +1,29 @@
-var pool = require("../db/index");
-var querystring = require("querystring");
-var createToken = require("../common/createToken");
-
-var jwt = require('jsonwebtoken');
+let pool = require("../db/index");
+let querystring = require("querystring");
+let createToken = require("../common/createToken");
+let jwt = require('jsonwebtoken');
 module.exports = function(res, req, next){
-	var username = res.body.username;
-	var password = res.body.password;
-	pool("select * from userInfo where username=? and password=?", [username, password])
+	let username = res.body.username;
+	let password = res.body.password;
+	pool("select * from userInfo where username=? and password=?", [username, password]) //[username, password]
 	.then(function(data){
 		if (data.length>0) {
-			var userInfo = data[0];
+			userInfo = data[0];
 			userInfo.token = createToken(userInfo["userid"]);
 			return pool("update userInfo set token=? where username=?", [userInfo.token, username])
 		}else{
 			req.json({
-				code: 1,
+				code: 103,
 				body: "",
 				msg: "密码错误",
 			})
 		}
 	})
 	.then(function(data){
+		req.cookie("token", userInfo.token, {maxAge: 1000*60*60*24*7, httpOnly: true}) //, 
 		req.json({
 			code: 0,
-			body: data,
+			body: userInfo,
 			msg: "登录成功",
 		})
 	})
@@ -31,3 +31,5 @@ module.exports = function(res, req, next){
 		console.log(e);
 	})
 }
+
+

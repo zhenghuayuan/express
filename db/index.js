@@ -4,7 +4,7 @@ var pool= mysql.createPool({
 	user: 'root',
 	password: '',
 	port: '3306',
-	database: 'test',
+	database: 'guessFood',
 	// 最大连接数，默认为10
 	connectionLimit: 10,
 });

@@ -18,17 +18,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(function(req, res, next) {
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-//     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Methods', 'POST,GET'); //PUT,,DELETE,OPTIONS
+//     res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+//     res.header("Content-Type", "application/json;charset=utf-8");  
+//     res.header("X-Powered-By",' 3.2.1') 
 //     next();
 // });
 // 路由
-app.use(function(res, req, next){
-	console.log(1)
-	next()
-});
-
+// app.use(function(res, req, next){
+//   console.log(JSON.stringify(res.body))
+//   console.log(JSON.stringify(res.param))
+//   console.log(JSON.stringify(res.path))
+//   next();
+// })
 app.use('/api', index);
 
 // catch 404 and forward to error handler

@@ -7,6 +7,13 @@ var connection = mysql.createConnection({
   database : 'test',
 });
 connection.connect();
+
+// mac 先关闭mysql
+// cd /usr/local/mysql-5.7.10-osx10.9-x86_64/bin
+// sudo su
+// ./mysqld_safe --skip-grant-tables & (会启动mysql)
+// ./mysql
+
 // 查询
 // connection.query('SELECT * FROM userInfo WHERE userid = ?',1, function(err, res, fields) {
 // 	if (err){
