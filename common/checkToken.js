@@ -18,6 +18,7 @@ module.exports = function(res, req, next){
 			.then(function(data){
 				if (data[0]['token'] == token) {
 					console.log(`通过:${JSON.stringify(decoded)}`)
+					res.userid = decoded.userid; 
 					next();
 				}else{
 					throw new Error('token比对失败');
