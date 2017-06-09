@@ -20,7 +20,7 @@ module.exports = function(sql, values){
 				if(err){
 					rejcet(err);
 					return;
-				};
+				};  
 				resolve(result);
 			})
 		});

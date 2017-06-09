@@ -5,8 +5,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var index = require('./routes/index');
+var routes = require('./routes/index');
 var sql = require('./db/index');
+var game = require('./game/index');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -32,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //   console.log(JSON.stringify(res.path))
 //   next();
 // })
-app.use('/api', index);
+app.use('/api', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

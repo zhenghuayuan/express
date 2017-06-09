@@ -1,6 +1,6 @@
 let pool = require("../db/index");
 let querystring = require("querystring");
-let createToken = require("../common/createToken");
+let util = require("../common/util");
 let jwt = require('jsonwebtoken');
 module.exports = function(res, req, next){
 	let username = res.body.username;
@@ -9,7 +9,7 @@ module.exports = function(res, req, next){
 	.then(function(data){
 		if (data.length>0) {
 			userInfo = data[0];
-			userInfo.token = createToken(userInfo["userid"]);
+			userInfo.token = util.createToken(userInfo["userid"]);
 			return pool("update userInfo set token=? where username=?", [userInfo.token, username])
 		}else{
 			req.json({
