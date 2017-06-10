@@ -73,7 +73,11 @@ connection.connect();
 // 	'PRIMARY KEY (id))'
 // );
 // connection.end();
-
+// 
+分页：
+select * from table LIMIT 5,10; #返回第6-15行数据  
+select * from table LIMIT 5; #返回前5行  
+select * from table LIMIT 0,5; #返回前5行  
 
 /*******************router************************/
 var express = require('express');

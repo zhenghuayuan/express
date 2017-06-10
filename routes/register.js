@@ -21,11 +21,11 @@ module.exports = function(res, req, next){
 			return data;
 		}
 	})
+	// .then(function(data){
+	// 	return pool("select * from userInfo order by userid DESC limit 1")
+	// })
 	.then(function(data){
-		return pool("select * from userInfo order by userid DESC limit 1")
-	})
-	.then(function(data){
-		var userid = data[0].userid+1;
+		// var userid = data[0].userid+1;
 		return pool("insert into userInfo(userid,username,password) values(?,?,?)", [userid, username, password])
 	})
 	.then(function(){

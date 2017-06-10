@@ -2,12 +2,11 @@ const pool = require('../db/index')
 const util = require('../common/util')
 console.log("游戏运行中...")
 
-
 function statistics(){
 	let preiods =  util.createPreiods() // 创建当前期数
-	let lotteryOptions = createLotteryOptions() // 随机开奖结果
-	let lotteryPool = 999
-	let allBetGrounp = 999
+	let lotteryOptions = createLotteryOptions() //  本期随机开奖结果
+	let lotteryPool = 999 // 本期奖池
+	let allBetGrounp = 50 // 本期组数
 
 	pool('insert into historylottery(preiods, lotteryOptions, lotteryPool, allBetGrounp) values(?,?,?,?)', [preiods, lotteryOptions, lotteryPool, allBetGrounp])
 	.then((data)=>{
@@ -15,29 +14,32 @@ function statistics(){
 	})
 	.then((data)=>{
 		if (data.length == 0) {
-			Promise.reject("本期暂无订单")
-			return; 
+			return Promise.reject("本期暂无订单")
 		}
+		pool('update lotteryorder set status = 2 where preiods=?', [preiods])
+		.then(data=>{
+			console.log("订单更新完成")
+		})
+		.catch(e=>{
+			console.log(e)
+		})
 		return findLucky(lotteryOptions, data)
-		
 	})
 	.then(luckyOrderArr=>{
 		if (luckyOrderArr.length == 0) {
-			Promise.reject("本期无人中奖")
-			return; 
+			return Promise.reject("本期无人中奖")
 		}
 		let sql = 'insert into luckyuser(preiods, lotteryOptions, userid, orderId, betOptions) values'
 		let values = []
 		luckyOrderArr.forEach(item=>{
-			// sql+= '(?,?,?,?,?),'
-			sql+= '('+item.preiods+','+lotteryOptions+','+item.orderId+','+item.userid+','+item.betOptions+'),'
-
-			// let arr = [item.preiods, lotteryOptions, item.orderId, item.userid, item.betOptions]
-			// values = values.concat(arr)
+			sql += '(?,?,?,?,?),'
+			// sql+= '('+item.preiods+','+lotteryOptions+','+item.userid+','+item.orderId+','+item.betOptions+'),'
+			let arr = [item.preiods, lotteryOptions, item.userid, item.orderId, item.betOptions]
+			values = values.concat(arr)
 		})
 		sql = sql.slice(0, sql.length-1)
 		console.log(sql)
-		return pool(sql, '')
+		return pool(sql, values)
 	})
 	.then((data)=>{
 		console.log(data)
@@ -69,9 +71,5 @@ function findLucky(lotteryOptions, allOrder){
 	})
 	return luckyArr
 }
-
 module.exports = {}
 
-// (2017060921,["xg","hb","pj"],87479421372ec781a3973dcf34f83ad5,100001,["zj","mf","gz","yrc","ss","lm","kl","xlx","xg","hg","sb","pj","ps","hb","nn","xj"]),
-// (2017060921,["xg","hb","pj"],9bf05d6f400cc7f318b2c8a8854d4c29,100001,["zj","mf","gz","yrc","ss","lm","kl","xlx","xg","hg","sb","pj","ps","hb","nn","xj"]),
-// (2017060921,["xg","hb","pj"],283171a44d9ad4c818035aa96d1e8434,100001,["zj","mf","gz","yrc","ss","lm","kl","xlx","xg","hg","sb","pj","ps","hb","nn","xj"])

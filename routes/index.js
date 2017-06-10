@@ -8,6 +8,7 @@ const login = require("./login.js");
 const userinfo = require("./userinfo.js");
 const confirmOrder = require("./confirm-order.js");
 const openlotteryResult = require("./openlottery-result.js");
+const lotteryRecord = require("./lottery-record.js");
 
 
 
@@ -17,7 +18,8 @@ router.all('*', function(res, req, next){
 	console.log(path);
 	if (path == '/userinfo' || 
 		path == '/guessinfo' ||
-		path == '/confirm-order') {
+		path == '/confirm-order' ||
+		path == '/lotteryRecord') {
 		checkToken(res, req, next);
 		return;
 	}
@@ -28,6 +30,7 @@ router.get('/guessinfo', guessinfo);
 router.get('/userinfo', userinfo);
 router.post('/confirm-order', confirmOrder);
 router.get('/openlottery-result', openlotteryResult);
+router.get('/lotteryRecord', lotteryRecord);
 
 router.post('/register', register);
 router.post('/login', login);
