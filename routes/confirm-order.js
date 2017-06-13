@@ -21,8 +21,8 @@ function createOrder(res, req, next, options, betMizu, isLast){
 		options,
 		createTime
 	})
-	let values = [userid, orderId, preiods, options, 1, betMizu, 1, createTime]
-	pool('insert into lotteryOrder(userid,orderId,preiods,betOptions,betGrounp,betMizu,status,createTime) values(?,?,?,?,?,?,?,?)', values)
+	let values = [userid, orderId, preiods, options, 1, betMizu, 1, createTime, '[]']
+	pool('insert into lotteryOrder(userid,orderId,preiods,betOptions,betGrounp,betMizu,status,createTime,lotteryOptions) values(?,?,?,?,?,?,?,?,?)', values)
 	.then((data)=>{
 		if (isLast) {
 			req.json({

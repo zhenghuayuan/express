@@ -1,7 +1,7 @@
 let jwt = require('jsonwebtoken');
 let pool = require("../db/index");
-module.exports = function(res, req, next){
-	let token = res.cookies['token']
+module.exports = function(req, res, next){
+	let token = req.cookies['token']
 	if (token) {
 		new Promise(function(resolve, reject){
 			return jwt.verify(token, "zheng", function(err, decoded){
@@ -14,26 +14,28 @@ module.exports = function(res, req, next){
 		})
 		.then(function(decoded){
 			let userid = decoded.userid;
+			console.log('userid:'+userid)
 			pool("select token from userInfo where userid=?", [userid]) //[username, password]
 			.then(function(data){
 				if (data[0]['token'] == token) {
 					console.log(`通过:${JSON.stringify(decoded)}`)
-					res.userid = decoded.userid; 
+					req.userid = decoded.userid; 
 					next();
 				}else{
-					throw new Error('token比对失败');
+					res.json({
+						code: 102,
+						msg: 'token已过期',
+					})
 				}
 			})
 		})
 		.catch(function(e){
-			req.json({
-				code: 102,
-				msg: "token已过期",
-			})
+			console.log(e)
 		})
 		return;
 	};
-	req.json({
+	console.log('未登录');
+	res.json({
 		code: 101,
 		msg: "未登录",
 	})
