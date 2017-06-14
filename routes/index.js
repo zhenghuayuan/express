@@ -10,11 +10,13 @@ const confirmOrder = require("./confirm-order.js");
 const openlotteryResult = require("./openlottery-result.js");
 const lotteryRecord = require("./lottery-record.js");
 const historyLottery = require("./history-lottery.js");
+const test = require("./test.js");
+
 
 // 需要登录较验
 router.all('*', function(res, req, next){
 	var path = res.path;
-	console.log(path);
+	console.log(`path:${path}`);
 	// if (path == '/userinfo' || 
 	// 	path == '/guessinfo' ||
 	// 	path == '/confirmOrder' ||
@@ -23,8 +25,11 @@ router.all('*', function(res, req, next){
 	// 	checkToken(res, req, next);
 	// 	return;
 	// }
-	checkToken(res, req, next);
-	// next();
+	if (path == '/login' ||
+		path == '/register') {
+		return next()
+	}
+	checkToken(res, req, next)
 })
 
 router.get('/guessinfo', guessinfo);
@@ -33,7 +38,7 @@ router.post('/confirmOrder', confirmOrder);
 router.get('/openlotteryResult', openlotteryResult);
 router.get('/lotteryRecord', lotteryRecord);
 router.get('/historyLottery', historyLottery);
-
+router.get('/test', test);
 router.post('/register', register);
 router.post('/login', login);
 module.exports = router;

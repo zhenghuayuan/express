@@ -38,7 +38,7 @@ util.createMd5 = function(obj){
 	for(let key in obj){
 		arr.push(obj[key])
 	}
-	let str = arr.sort().join('')
+	let str = arr.sort().join('') + util.randomNoRepeat(8,0,25).join('')
 	let res = md5.update(str).digest('hex')
 	return res
 }

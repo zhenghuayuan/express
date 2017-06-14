@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var sql = require('./db/index');
 var game = require('./game/index');
+// var seque = require('./db/seque');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

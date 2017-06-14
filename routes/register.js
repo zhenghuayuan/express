@@ -1,41 +1,40 @@
-var pool = require("../db/index");
-module.exports = function(res, req, next){
-	var username = res.body.username;
-	var password = res.body.password;
-	var email = res.body.email;
-	console.log(1)
-	req.json({
-		code: 0
-	})
-	return;
+let pool = require("../db/index")
+module.exports = function(req, res, next){
+	let username = req.body.username;
+	let password = req.body.password;
+	let email = req.body.email
+	if (username == '' || 
+		password == '' ||
+		email == ''){
+		return res.json({
+			code: 105,
+			body: "",
+			msg: "注册失败，信息不完整",
+		})
+	}
 	pool("select * from userInfo where username=?", [username])
-	.then(function(data){
+	.then(data=>{
 		if (data.length>0) {
-			req.json({
-				code: 100,
+			res.json({
+				code: 104,
 				body: "",
 				msg: "注册失败，用户名冲突",
 			});
-			throw new Error("注册失败，用户名冲突");
-		}else{
-			return data;
+			return Promise.reject("注册失败，用户名冲突")
 		}
+		return data
 	})
-	// .then(function(data){
-	// 	return pool("select * from userInfo order by userid DESC limit 1")
-	// })
-	.then(function(data){
-		// var userid = data[0].userid+1;
-		return pool("insert into userInfo(userid,username,password) values(?,?,?)", [userid, username, password])
+	.then(data=>{
+		return pool("insert into userInfo(username,password) values(?,?)", [username, password])
 	})
-	.then(function(){
-		req.json({
+	.then(data=>{
+		res.json({
 			code: 0,
 			body: "",
 			msg: "注册成功",
 		})
 	})
-	.catch(function(e){
+	.catch(e=>{
 		console.log(e);
 	})
 }
