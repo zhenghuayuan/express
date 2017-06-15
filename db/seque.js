@@ -8,5 +8,4 @@ let seque = new Sequelize('lottery', 'root', '', {
 		idle: 10000
 	}
 })
-
 module.exports = seque

@@ -5,12 +5,14 @@ const checkToken = require('../common/checkToken')
 const guessinfo = require("./guessinfo.js");
 const register = require("./register.js");
 const login = require("./login.js");
+const logout = require("./logout.js");
+
 const userinfo = require("./userinfo.js");
 const confirmOrder = require("./confirm-order.js");
 const openlotteryResult = require("./openlottery-result.js");
 const lotteryRecord = require("./lottery-record.js");
 const historyLottery = require("./history-lottery.js");
-const test = require("./test.js");
+// const test = require("./test.js");
 
 
 // 需要登录较验
@@ -38,7 +40,9 @@ router.post('/confirmOrder', confirmOrder);
 router.get('/openlotteryResult', openlotteryResult);
 router.get('/lotteryRecord', lotteryRecord);
 router.get('/historyLottery', historyLottery);
-router.get('/test', test);
+router.get('/logout', logout);
+// router.get('/test', test);
 router.post('/register', register);
 router.post('/login', login);
+
 module.exports = router;

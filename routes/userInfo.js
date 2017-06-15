@@ -1,15 +1,15 @@
 const pool = require("../db/index");
 module.exports = function(req, res, next) {
-	let token = req.cookies.token;
-	pool('SELECT * FROM userInfo WHERE token = ?', [token])
-	.then(function(data){
+	let userid = req.userid;
+	pool('SELECT * FROM userinfo WHERE userid = ?', [userid])
+	.then(data=>{
 		res.json({
 			code: 0,
 			body: data[0],
 			msg: "",
 		})
 	})
-	.catch(function(){
+	.catch(e=>{
 		console.log(e)
 	})
 };
