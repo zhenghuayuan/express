@@ -3,6 +3,8 @@ const crypto = require('crypto')
 let util = new Object()
 util.config = {}
 util.config.PRICE = 200 // 单价
+util.config.BONUS = 30000 // 奖金
+
 util.config.foodItems = [
     {name: "炸鸡", classname: "zj", index: 1,  hot: 9.9, active: false,},
     {name: "米饭", classname: "mf", index: 2,  hot: 9.9, active: false,},
@@ -45,6 +47,11 @@ util.createMd5 = function(obj){
 // 创建当前期号
 util.createPreiods = function(){
 	var d = util.format(+new Date(), 'yyyy-MM-dd hh')
+	return d.replace(/[^0-9]/g, '')
+}
+// 创建上一期期号
+util.createLastPreiods = function(){
+	var d = util.format(+new Date()-1000*60*60, 'yyyy-MM-dd hh')
 	return d.replace(/[^0-9]/g, '')
 }
 // 创建本期开奖时间

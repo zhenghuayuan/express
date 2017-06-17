@@ -8,66 +8,88 @@ function statistics(){
 	let lotteryPool = 999 // 本期奖池
 	let allBetGrounp = 50 // 本期组数
 	let luckyOrderArr = [] // 本期中奖订单
-	
-	// pool('insert into historylottery(preiods, lotteryOptions, lotteryPool, allBetGrounp) values(?,?,?,?)', [preiods, lotteryOptions, lotteryPool, allBetGrounp])
-	// .then((data)=>{
-	// 	return 
-	// })
+
+	// 查找订单
 	pool('select * from lotteryorder where preiods=?', [preiods])
-	// 查找中奖者
 	.then(data=>{
 		if (data.length == 0) {
-			return Promise.reject("本期暂无订单")
+			// return Promise.reject("本期暂无订单")
+			console.log('本期暂无订单')
 		}
+		// 查找中奖者
 		luckyOrderArr = findLucky(lotteryOptions, data)
-		return 
-	})
-	// 本期订单状态置为 2(未中奖)
-	.then(data=>{
+		// 本期订单状态置为 2(未中奖)
 		return pool('update lotteryorder set status = ?, lotteryOptions = ?  where preiods=?', [2, lotteryOptions, preiods])
 	})
 	// 中奖者状态修改
 	.then(data=>{
 		if (luckyOrderArr.length == 0) {
-			return Promise.reject("本期无人中奖")
+			console.log("本期无人中奖")
+			return pool('insert into historylottery(preiods, lotteryOptions, lotteryPool, allBetGrounp, lotteryUser) values(?,?,?,?,?)', [preiods, lotteryOptions, lotteryPool, allBetGrounp, '[]'])
+			.then(data=>{
+				return Promise.reject('本期开奖完成')
+			})
 		}
-		
-		// 中奖人订单置为 3(已中奖)
-		let sql1 = 'update lotteryorder set status = 3 where orderId in ($values)'
-		let orderIdArr = []
-		// 中奖订单添加到中奖列表
-		let sql2 = 'insert into luckyuser(preiods, lotteryOptions, userid, orderId, betOptions) values$values'
-		let luckyuserArr = []
-		// 增加一条历史开奖记录
-		let sql3 = 'insert into historylottery(preiods, lotteryOptions, lotteryPool, allBetGrounp, lotteryUser) values(?,?,?,?,?)'
+		return
+	})
+	.then(data=>{
 		let lotteryUser = []
-
+		let orderIdArr = []
+		let luckyOrder = []
+		let userCi = {} // 存储数次
 		luckyOrderArr.forEach(item=>{
-			for(let key in item){
-				if (typeof item[key] == 'string'){
-					item[key] = JSON.stringify(item[key])
-				}
-			}
 			orderIdArr.push(item.orderId) // values 如果是字符串类型 必须手动加上 \' (引号) 或者 JSON.stringify()
-			luckyuserArr.push('('+item.preiods+','+JSON.stringify(lotteryOptions)+','+item.userid+','+item.orderId+','+item.betOptions+')')
+			luckyOrder.push([item.preiods, lotteryOptions, item.userid, item.orderId, item.betOptions])
 			lotteryUser.push(item.userid)
+			if (userCi[item.userid]) {
+				userCi[item.userid] ++
+			}else{
+				userCi[item.userid] = 1
+			}
 		})
-		sql1 = sql1.replace(/\$values/g, orderIdArr.join(','))
-		sql2 = sql2.replace(/\$values/g, luckyuserArr.join(','))
+		console.log(userCi)
+		pool('select mizu,userid from userinfo where userid in (?)', [lotteryUser])
+		.then((data)=>{
+			// let mizuArr = [] // 用户中奖后的觅钻 已经计算
+			// let useridArr = [] // 用户id 已经去重
+			for(let key in userCi){
+				data.forEach(item=>{
+					if (item.userid == key) {
+						// mizuArr.push(userCi[key]*util.config.BONUS+item.mizu)
+						// useridArr.push(key)
+						pool('update userinfo set mizu = ? where userid = ?', [userCi[key]*util.config.BONUS+item.mizu, key])
+						.then(data=>{
+							console.log(`用户奖金发放:${key}`)
+						})
+						.catch(e=>{
+							console.log(e)
+						})
+					}
+				})
+			}
+			
+		})
+		.catch(e=>{
+			console.log(e)
+		})
 		return Promise.all([
-			pool(sql1, []),
-			pool(sql2, []),
-			pool(sql3, [preiods, lotteryOptions, lotteryPool, allBetGrounp, JSON.stringify(lotteryUser)])
+			// 中奖人订单置为 3(已中奖)
+			pool('update lotteryorder set status = 3 where orderId in (?)', [orderIdArr]),
+			// 中奖订单添加到中奖列表
+			pool('insert into luckyuser(preiods, lotteryOptions, userid, orderId, betOptions) values ?', [luckyOrder]),
+			// 增加一条历史开奖记录
+			pool('insert into historylottery(preiods, lotteryOptions, lotteryPool, allBetGrounp, lotteryUser) values(?,?,?,?,?)', [preiods, lotteryOptions, lotteryPool, allBetGrounp, JSON.stringify(lotteryUser)]),
+
 		])
 	})
 	.then(data=>{
-		console.log('本期开奖操作成功')
+		console.log('本期开奖完成')
 	})
 	.catch(e=>{
 		console.log(e)
 	})
 }
-statistics()
+
 // 随机开奖
 function createLotteryOptions(){
 	let arr = util.randomNoRepeat(3, 0, 15)
@@ -90,5 +112,24 @@ function findLucky(lotteryOptions, allOrder){
 	})
 	return luckyArr
 }
+// 节流控制
+let isStatistics = true
+setInterval(()=>{
+	let d = new Date()
+	let hours = d.getHours()
+	let minutes = d.getMinutes()
+	// 在59分55秒后 执行统计开奖
+ 	if (minutes == 59) {
+ 		let seconds = d.getSeconds()
+ 		if (seconds >= 50 && isStatistics) {
+ 			isStatistics = false
+ 			setTimeout(()=>{
+ 				isStatistics = true
+ 			}, 1000*10)
+ 			console.log('开奖中...')
+ 			statistics()
+ 		}
+ 	}
+}, 1000)
 module.exports = {}
 

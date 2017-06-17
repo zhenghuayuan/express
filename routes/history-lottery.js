@@ -29,6 +29,7 @@ module.exports = function(res, req, next){
 	.then(data=>{
 		// 再把用户映射到对应的开奖记录里
 		jsonBody.forEach(record=>{
+			record['lotteryOptions'] = JSON.parse(record['lotteryOptions'])
 			record['lotteryUserList'] = []
 			record['lotteryUser'] = JSON.parse(record['lotteryUser'] || '[]')
 			let lotteryUserArr = []

@@ -16,7 +16,7 @@ module.exports = (req, res, next)=>{
 			createTime
 		})
 		allBetMizu += betMizu
-		let arr = [userid, orderId, preiods, opts, 1, 999, 1, createTime, '[]']
+		let arr = [userid, orderId, preiods, opts, 1, betMizu, 1, createTime, '[]']
  		allOrder.push(arr)
 	})
 	// 查询用户觅钻
