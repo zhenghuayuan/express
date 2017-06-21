@@ -1,0 +1,117 @@
+<ion-view view-title="数据">
+    <ion-content class="padding">
+        <div class="base-title">
+            <div class="player-total">累计玩家 <span class="green-theme-color" ng-bind="data.registerTotal"></span></div>
+            <div class="player-online">当前在线 <span class="green-theme-color">52456</span></div>
+        </div>
+
+        <div class="charts-box">
+            <div class="charts-page">
+                <highchart id="chart" config="chartUser" style="height:120px"></highchart>
+            </div>
+            <div class="data-page">
+                <div class="data-title">新增玩家</div>
+                <div class="content-s">
+                    <div class="content-s-left">
+                        <div class="green-theme-color" ng-bind="data.newPlayer[0]"></div>
+                        <div class="gray-theme-color" ng-bind="data.newPlayer[1]"></div>
+                        <div class="gray-theme-color" ng-bind="data.newPlayer[2]"></div>
+                    </div>
+                    <div class="content-s-right">
+                        <div class="data-today "><span class="icon-today public-icon">今时</span></div>
+                        <div class="data-today "><span class="icon-yes public-icon">昨时</span></div>
+                        <div class="data-today "><span class="icon-yes public-icon">昨天</span></div>
+                    </div>
+                </div>
+                <!-- <div class="data-today green-theme-color"><span class="icon-today public-icon">今时</span></div>
+                <div class="data-today gray-theme-color"><span class="icon-yes public-icon">昨时</span></div>
+                <div class="data-today gray-theme-color"><span class="icon-yes public-icon">昨天</span></div> -->
+            </div>
+        </div>
+
+        <div class="charts-box">
+            <div class="charts-page">
+                <highchart id="chart" config="chartActive" style="height:120px"></highchart>
+            </div>
+            <div class="data-page">
+                <div class="data-title">活跃玩家</div>
+                <div class="content-s">
+                    <div class="content-s-left">
+                        <div class="green-theme-color" ng-bind="data.gamePlayer[0]"></div>
+                        <div class="gray-theme-color" ng-bind="data.gamePlayer[1]"></div>
+                        <div class="gray-theme-color" ng-bind="data.gamePlayer[2]"></div>
+                    </div>
+                    <div class="content-s-right">
+                        <div class="data-today "><span class="icon-today public-icon">今时</span></div>
+                        <div class="data-today "><span class="icon-yes public-icon">昨时</span></div>
+                        <div class="data-today "><span class="icon-yes public-icon">昨天</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-box">
+            <div class="charts-page">
+                <highchart id="chart" config="chartIncome" style="height:120px"></highchart>
+            </div>
+            <div class="data-page">
+                <div class="data-title">充值金额</div>
+                <div class="content-s">
+                    <div class="content-s-left">
+                        <div class="green-theme-color" ng-bind="data.income[0]"></div>
+                        <div class="gray-theme-color" ng-bind="data.income[1]"></div>
+                        <div class="gray-theme-color" ng-bind="data.income[2]"></div>
+                    </div>
+                    <div class="content-s-right">
+                        <div class="data-today "><span class="icon-today public-icon">今时</span></div>
+                        <div class="data-today "><span class="icon-yes public-icon">昨时</span></div>
+                        <div class="data-today "><span class="icon-yes public-icon">昨天</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-box">
+            <div class="charts-page">
+                <highchart id="chart" config="chartCard" style="height:120px"></highchart>
+            </div>
+            <div class="data-page">
+                <div class="data-title">房卡消耗</div>
+                <div class="content-s">
+                    <div class="content-s-left">
+                        <div class="green-theme-color" ng-bind="data.card[0]"></div>
+                        <div class="gray-theme-color" ng-bind="data.card[1]"></div>
+                        <div class="gray-theme-color" ng-bind="data.card[2]"></div>
+                    </div>
+                    <div class="content-s-right">
+                        <div class="data-today "><span class="icon-today public-icon">今时</span></div>
+                        <div class="data-today "><span class="icon-yes public-icon">昨时</span></div>
+                        <div class="data-today "><span class="icon-yes public-icon">昨天</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-box">
+            <highchart id="chart" config="columnConfig" style="height:120px"></highchart>
+            <!-- <div class="charts-page">
+                <highchart id="chart" config="columnConfig" style="height:120px"></highchart>
+            </div>
+            <div class="data-page">
+                <div class="data-title">各游戏房卡消耗</div>
+                <div class="content-s">
+                    <div class="content-s-left">
+                        <div class="green-theme-color" ng-bind="data.newPlayer[0]"></div>
+                        <div class="gray-theme-color" ng-bind="data.newPlayer[0]"></div>
+                        <div class="gray-theme-color" ng-bind="data.newPlayer[0]"></div>
+                    </div>
+                    <div class="content-s-right">
+                        <div class="data-today "><span class="icon-today public-icon">今时</span></div>
+                        <div class="data-today "><span class="icon-yes public-icon">昨时</span></div>
+                        <div class="data-today "><span class="icon-yes public-icon">昨天</span></div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </ion-content>
+</ion-view>

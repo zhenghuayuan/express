@@ -1,0 +1,29 @@
+<ion-view view-title="登录" hide-nav-bar="true">
+    <div class="bar bar-header  bar-positive ">
+        <h1 class="title">登录</h1>
+    </div>
+    <ion-content class="has-subheader">
+        <form name="myfastForm" ng-submit="signIn()">
+            <div class="list list-inset removePM">
+                <label class="item item-input">
+                    <input type="text" name="username" placeholder="账号" ng-model="page.user.username" required>
+                </label>
+                <label class="item  item-input">
+                    <input type="password" name="password"  placeholder="密码" ng-model="page.user.password" required>
+                </label>
+                <label class="item  item-input">
+                    <div id="embed-captcha"></div>
+                    <p id="wait" class="show">正在加载验证码......</p>
+                    <p id="notice" class="hide">请先拖动验证码到相应位置</p>
+                </label>
+            </div>
+
+            <div class="padding">
+                 <button class="button button-block button-positive"  ng-disabled="myfastForm.username.$invalid || myfastForm.password.$invalid">
+                     <b>登&nbsp;&nbsp;录</b>
+                 </button>
+                 <span id="tips_error"></span>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

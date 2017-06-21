@@ -30,8 +30,9 @@ router.all('*', function(res, req, next){
 	if (path == '/login' ||
 		path == '/register') {
 		return next()
+	}else{
+		checkToken(res, req, next)
 	}
-	checkToken(res, req, next)
 })
 
 router.get('/guessinfo', guessinfo)

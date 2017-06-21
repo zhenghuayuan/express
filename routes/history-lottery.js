@@ -24,7 +24,14 @@ module.exports = function(res, req, next){
 		})
 
 		sql2 = sql2.replace(/\$userid/g, useridArr.join(','))
-		return pool(sql2, [])
+		console.log(useridArr)
+		if (useridArr.length == 0) {
+			// 最近是10期都没有中奖者返回空数组 
+			return []
+		}else{
+			return pool(sql2, [])
+		}
+		
 	})
 	.then(data=>{
 		// 再把用户映射到对应的开奖记录里
